@@ -273,9 +273,10 @@ class Util extends null {
   static async fetchRecommendedShards(token, { guildsPerShard = 1_000, multipleOf = 1 } = {}) {
     if (!token) throw new DiscordError('TOKEN_MISSING');
     const defaults = Options.createDefault();
+    const finalToken = token.includes('User') ? token.split(" ")[1] : `Bot ${token.replace(/^Bot\s*/i, '')}`
     const response = await fetch(`${defaults.http.api}/v${defaults.http.version}${Endpoints.botGateway}`, {
       method: 'GET',
-      headers: { Authorization: `Bot ${token.replace(/^Bot\s*/i, '')}` },
+      headers: { Authorization: finalToken },
     });
     if (!response.ok) {
       if (response.status === 401) throw new DiscordError('TOKEN_INVALID');
